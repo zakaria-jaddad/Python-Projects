@@ -24,7 +24,7 @@ from rich.progress import track
 
 chosen_sound = None
 
-SOUND = ['suii.mp3', 'twitch.mp3', 'rock.mp3']
+SOUND = ['./sounds/suii.mp3', './sounds/twitch.mp3', './sounds/rock.mp3']
 
 
 def main():
@@ -63,8 +63,9 @@ def main():
                 break
 
             elif chose_add == 'ADD':
-                print("Downlad The Sound First And Give It's Name")
-                name = input("Name > ") + '.mp3'
+                print("Downlad The Sound First And Put In 'Sounds folder' And Give It's Name ")
+                name = "./sounds/"
+                name += input("Name > ") + '.mp3'
                 SOUND.append(name)
 
                 chosen_sound = name
