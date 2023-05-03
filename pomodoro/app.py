@@ -27,50 +27,50 @@ chosen_sound = None
 SOUND = ['suii.mp3', 'twitch.mp3', 'rock.mp3']
 
 def main():
-    while True:
-        try:
-            pomodoro = int(input("> Pomodoro Time : "))
-            time_break = int(input("> Short Break : "))
-            break
-        except ValueError:
-            print(colored("Write A Number Not A String You Morone", 'red'))
+    try:
+        pomodoro = int(sys.argv[1])
+        time_break = int(sys.argv[2])
+    except ValueError:
+        print(colored("Write A Number Not A String You Morone", 'red'))
 
+    foo = input("> Press 'E' For Settings ").upper()
 
-    chose_add = input("> Chose A Notification Sound Or Add One \n  CHOSE OR ADD OR NOTHING > ").upper()
+    if foo == 'E':
+        chose_add = input("> Chose A Notification Sound Or Add One \n  CHOSE OR ADD ").upper()
 
-    while True:
-        if chose_add == 'CHOSE':
+        while True:
+            if chose_add == 'CHOSE':
 
-            for i in range(len(SOUND)):
-                print(f"{i + 1} : {SOUND[i]}")
+                for i in range(len(SOUND)):
+                    print(f"{i + 1} : {SOUND[i]}")
 
-            # ! i'll come back soon to it 
-            sound = int(input("Chose > ")) - 1
-            chosen_sound = SOUND[sound]
+                # ! i'll come back soon to it 
+                sound = int(input("Chose > ")) - 1
+                chosen_sound = SOUND[sound]
 
-            play_sound(chosen_sound)
-            print(colored("> Done", 'green'))
-            break
-
-        elif chose_add == 'ADD':
-            print("Downlad The Sound First And Give It's Name")
-            name = input("Name > ") + '.mp3'
-            SOUND.append(name)
-
-            chosen_sound = name
-
-            # palying the sound 
-            # ! there is a bug here and i dont't know where it came from 
-            try: 
                 play_sound(chosen_sound)
-                print(colored("Done", "green", "on_white"))
+                print(colored("> Done", 'green'))
                 break
-            except ValueError:
-                print(colored("Sound Name Not Found Try Again", "red"))
 
-        elif chose_add == 'NOTHING':
-            chosen_sound = SOUND[1]
-            break
+            elif chose_add == 'ADD':
+                print("Downlad The Sound First And Give It's Name")
+                name = input("Name > ") + '.mp3'
+                SOUND.append(name)
+
+                chosen_sound = name
+
+                # palying the sound 
+                # ! there is a bug here and i dont't know where it came from 
+                try: 
+                    play_sound(chosen_sound)
+                    print(colored("Done", "green", "on_white"))
+                    break
+                except ValueError:
+                    print(colored("Sound Name Not Found Try Again", "red"))
+
+    else:
+        chosen_sound = SOUND[1]
+        play_sound(chosen_sound)
 
 
     
