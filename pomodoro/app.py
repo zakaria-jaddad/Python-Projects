@@ -1,22 +1,26 @@
 # after i heva practiced a bit What Do I Want to make 
     # ? user chose or add it's own sound if the user didn't chose one there is the deafult DONE 
-    # ? user chose how long the pomodoro times will take 
-    # ? user chose how long the short braek and long one would take 
-    # ? once every secion ended the user hear the shosen sound 
-    # ? user see what type of secion [pomodoro, short break, long break]
+    # ? user chose how long the pomodoro times will take DONE 
+    # ? user chose how long the short braek and long one would take DONE 
+    # ? once every secion ended the user hear the shosen sound DONE
+    # ? user see what type of secion [pomodoro, short break, long break] DONE
     # ? user can see the clock, how much time left sor the next secion 
-    # ? and a slider that have a percentage calculates the progress of the secion 
+    # ? and a slider that have a percentage calculates the progress of the secion DONE 
         # TODO : THAT IS ALL :)
 
 import datetime
 
 from termcolor import colored
 
-from helpers import play_sound, move_to_start, clear_line, formate
+from helpers import play_sound, formate, get_time
 
 import time
 
 import sys
+
+import warnings
+
+import os
 
 import time 
 
@@ -24,10 +28,25 @@ from rich.progress import track
 
 chosen_sound = None
 
-SOUND = ['./sounds/suii.mp3', './sounds/twitch.mp3', './sounds/rock.mp3']
+# * scanning the sounds dir to get audios and strore them SOUND_DIR list 
 
+SOUND_DIR = os.listdir('/Users/zakariajaddad/Documents/GitHub/Python-Projects/pomodoro/sounds')
+
+# * here just for adding the path for the folder and store it in SOUND 
+SOUND = []
+for sound in SOUND_DIR:
+    sound_path_name = "./sounds/" + sound
+    SOUND.append(sound_path_name)
+
+
+# ? if you wonder why i used two lists it's just because one will be shown to the user and the other 
+    # ? gives the path for the play_sound function 
 
 def main():
+
+    if len(sys.argv) < 3:
+        warnings.warn("The Script Accept 3 Arguments 'Name' 'Pomodoro Timer' 'Break Timer'")
+        sys.exit()
 
     SECION_COUNTER = 1
 
@@ -51,8 +70,8 @@ def main():
         while True:
             if chose_add == 'CHOSE':
 
-                for i in range(len(SOUND)):
-                    print(f"{i + 1} : {SOUND[i]}")
+                for i in range(len(SOUND_DIR)):
+                    print(f"{i + 1} : {SOUND_DIR[i]}")
 
                 # ! i'll come back soon to it 
                 sound = int(input("Chose > ")) - 1
@@ -63,21 +82,7 @@ def main():
                 break
 
             elif chose_add == 'ADD':
-                print("Downlad The Sound First And Put In 'Sounds folder' And Give It's Name ")
-                name = "./sounds/"
-                name += input("Name > ") + '.mp3'
-                SOUND.append(name)
-
-                chosen_sound = name
-
-                # palying the sound 
-                # ! there is a bug here and i dont't know where it came from 
-                try: 
-                    play_sound(chosen_sound)
-                    print(colored("Done", "green", "on_white"))
-                    break
-                except ValueError:
-                    print(colored("Sound Name Not Found Try Again", "red"))
+                print("Downlad The Sound First And Put In 'Sounds folder' To Chose it ")
 
     else:
         chosen_sound = SOUND[1]
@@ -89,21 +94,31 @@ def main():
         if SECION_COUNTER % 2 != 0:
             print(colored("Work Time !", 'cyan'))
 
-            for n in track(range(30), description="Work..."):
+            for n in track(range(POMODORO * 60), description="Work..."):
+
+                sys.stdout.write(f"\r{get_time()}          ")
+                sys.stdout.flush()
+
+                # sys.stdout.write('\r')
+                # sys.stdout.flush()
+
+                # sys.stdout.write(' ' * 20)
+                # sys.stdout.flush()
+
                 time.sleep(1)
 
         # * Short Break
         elif SECION_COUNTER % 2 == 0 and SECION_COUNTER % 8 != 0:
             print(colored("Short Break", 'red'))
 
-            for n in track(range(30), description="Break..."):
+            for n in track(range(BREAK_TIME * 60), description="Break..."):
                 time.sleep(1)
 
         # * Long Break 
         else:
             print(colored("Long Break", 'magenta')) 
 
-            for n in track(range(15), description="Nap..."):
+            for n in track(range(30 * 60), description="Nap..."):
                 time.sleep(1)
 
 
@@ -112,18 +127,8 @@ def main():
 
 
 
-    
-
-
-
 if __name__ == '__main__':
     main()
-
-
-# for n in track(range(20), description="Processing..."):
-#     # ! n here represent seconds 
-#     time.sleep(n * 0.1)
-
 
 # ! os we have 4 promodomos to get the long break and evry time a promodomo section ends a short break starts 
 #   ! so this is like this {
