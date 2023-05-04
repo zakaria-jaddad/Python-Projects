@@ -94,18 +94,18 @@ def main():
         if SECION_COUNTER % 2 != 0:
             print(colored("Work Time !", 'cyan'))
 
-            for n in track(range(POMODORO * 60), description="Work..."):
+            for n in track(range(15), description="Work..."):
 
-                sys.stdout.write(f"\r{get_time()}          ")
+                sys.stdout.write('\r')
                 sys.stdout.flush()
+                print(f'{get_time()}', end="\r", flush=True)
 
-                # sys.stdout.write('\r')
-                # sys.stdout.flush()
 
                 # sys.stdout.write(' ' * 20)
                 # sys.stdout.flush()
 
                 time.sleep(1)
+
 
         # * Short Break
         elif SECION_COUNTER % 2 == 0 and SECION_COUNTER % 8 != 0:
@@ -123,6 +123,7 @@ def main():
 
 
         play_sound(chosen_sound)
+        os.system("clear||cls")
         SECION_COUNTER +=1
 
 
