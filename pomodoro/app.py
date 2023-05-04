@@ -12,7 +12,7 @@ import datetime
 
 from termcolor import colored
 
-from helpers import play_sound, formate, get_time
+from helpers import play_sound, formate, get_time, tracker, quots
 
 import time
 
@@ -20,11 +20,13 @@ import sys
 
 import warnings
 
+import threading
+
+import random
+
 import os
 
 import time 
-
-from rich.progress import track
 
 chosen_sound = None
 
@@ -94,32 +96,23 @@ def main():
         if SECION_COUNTER % 2 != 0:
             print(colored("Work Time !", 'cyan'))
 
-            for n in track(range(15), description="Work..."):
-
-                sys.stdout.write('\r')
-                sys.stdout.flush()
-                print(f'{get_time()}', end="\r", flush=True)
-
-
-                # sys.stdout.write(' ' * 20)
-                # sys.stdout.flush()
-
-                time.sleep(1)
-
+            tracker(POMODORO, "Work...")
 
         # * Short Break
         elif SECION_COUNTER % 2 == 0 and SECION_COUNTER % 8 != 0:
             print(colored("Short Break", 'red'))
 
-            for n in track(range(BREAK_TIME * 60), description="Break..."):
-                time.sleep(1)
+            tracker(BREAK_TIME, "Break...")
 
         # * Long Break 
         else:
+            print(colored('Congrats 🤍 You Made It Nice Work, This Quote Is For You', 'white', 'on_cyan', ['bold']))
+            print(quots())
+            play_sound('./sounds/congrats/congrats_1.mp3')
+
             print(colored("Long Break", 'magenta')) 
 
-            for n in track(range(30 * 60), description="Nap..."):
-                time.sleep(1)
+            tracker(1, TODO_IN_BREAK_TIME[random.randint(0, len(TODO_IN_BREAK_TIME) - 1)])
 
 
         play_sound(chosen_sound)
@@ -129,6 +122,17 @@ def main():
 
 
 if __name__ == '__main__':
+    TODO_IN_BREAK_TIME = [
+        "Take A Nap...", 
+        "Read Book...", 
+        "Talk With Family...", 
+        "Do Some Pushups...", 
+        "Read Quran...", 
+        "Watch Youtube...", 
+        "Drink Water...", 
+        "Meditate..."
+    ]
+
     main()
 
 # ! os we have 4 promodomos to get the long break and evry time a promodomo section ends a short break starts 
